@@ -1,0 +1,42 @@
+{
+  "name": "buttrfly-api",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "PORT=8081 node bin/www",
+    "dev": "./node_modules/.bin/nodemon --inspect bin/www",
+    "dev-local": "LOCAL_API=http://localhost:1340 ./node_modules/.bin/nodemon --inspect bin/www",
+    "prd": "NODE_ENV=production PORT=8081 pm2 start bin/www --name buttrfly-api",
+    "deploy": "gcloud app deploy",
+    "lint": "repo-tools lint",
+    "pretest": "npm run lint",
+    "system-test": "repo-tools test app",
+    "test": "npm run system-test",
+    "e2e-test": "repo-tools test deploy"
+  },
+  "dependencies": {
+    "debug": "^2.6.3",
+    "emoji-regex": "^7.0.0",
+    "eosjs": "^20.0.0-beta2",
+    "koa": "^2.2.0",
+    "koa-bodyparser": "^3.2.0",
+    "koa-convert": "^1.2.0",
+    "koa-json": "^2.0.2",
+    "koa-jwt": "^3.3.2",
+    "koa-logger": "^2.0.1",
+    "koa-onerror": "^1.2.1",
+    "koa-router": "^7.1.1",
+    "koa-static": "^3.0.0",
+    "koa-views": "^5.2.1",
+    "koa2-cors": "^2.0.5",
+    "lodash": "^4.17.10",
+    "node-fetch": "^2.1.2",
+    "pg": "^7.4.3",
+    "pug": "^2.0.0-rc.1",
+    "socket.io": "^2.1.1",
+    "text-encoding": "^0.7.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.6"
+  }
+}

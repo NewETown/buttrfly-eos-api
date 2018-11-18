@@ -1,0 +1,174 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+const Koa = require('koa')
+const app = new Koa()
+const views = require('koa-views')
+const json = require('koa-json')
+const onerror = require('koa-onerror')
+const bodyparser = require('koa-bodyparser')
+const logger = require('koa-logger')
+const cors = require('koa2-cors')
+const jwt = require('koa-jwt')
+
+// error handler
+onerror(app)
+
+// middlewares
+app.use(bodyparser({
+  enableTypes:['json', 'form', 'text']
+}))
+app.use(json())
+app.use(logger())
+app.use(require('koa-static')(__dirname + '/public'))
+// ADD WHITELISTED URLS HERE
+const allowedHosts = ['localhost:1337', 'localhost:8080']
+app.use(cors({
+  origin: function(ctx) {
+    if (allowedHosts.indexOf(ctx.host) === -1) {
+      return ctx.throw(`🙈 ${ctx.host} is not an authorized host site.`);
+    }
+    return '*';
+  },
+  exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
+  maxAge: 5,
+  credentials: true,
+  allowMethods: ['GET', 'POST', 'DELETE'],
+  allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
+}));
+
+app.use(views(__dirname + '/views', {
+  extension: 'pug'
+}))
+
+// logger
+app.use(async (ctx, next) => {
+  const start = new Date()
+  await next()
+  const ms = new Date() - start
+  console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
+})
+
+// Protected middleware
+// app.use(async (ctx, next) => {
+//   if (ctx.url.match(/^\/api/)) {
+//     // ctx.body = 'protected\n';
+//     console.log('Protected route!')
+//     console.log(ctx.state.user)
+//   }
+//   await next()
+// });
+
+const SECRET = 'YOUR_SECRET'
+const bypass = async (ctx) => {
+  // console.log('this', this);
+  // console.log('header', data);
+  // console.log('auth', data && data.header && data.header.authorization);
+  // Allow for bypass by route regex
+  return ctx.url.match(/^\/api\/SOMETHING\/ANOTHER/) ? true : false
+}
+// app.use(jwt({ secret: SECRET }).unless({custom: bypass}));
+
+// error-handling
+app.on('error', (err, ctx) => {
+  console.error('server error', err, ctx)
+});
+
+const debug = require('debug')('demo:server');
+const http = require('http');
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+const port = normalizePort(process.env.PORT || '1337');
+// app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+const server = http.createServer(app.callback());
+const io = require('socket.io')(server)
+
+// io.on('connection', function(socket){
+//   console.log('connected', socket.id)
+// });
+
+const campaign = require('../routes/campaign')(io)
+const influencer = require('../routes/influencer')(io)
+
+// routes
+app.use(campaign.routes(), campaign.allowedMethods())
+app.use(influencer.routes(), influencer.allowedMethods())
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}
