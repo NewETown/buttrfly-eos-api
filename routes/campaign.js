@@ -24,7 +24,7 @@ module.exports = (io) => {
     try {
       // Try/Catch async/await pattern
       const availableTables = [
-        'influencer',
+        'campaign',
         'campaignpair'
       ]
 
