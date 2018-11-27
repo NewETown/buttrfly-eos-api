@@ -25,11 +25,11 @@ app.use(json())
 app.use(logger())
 app.use(require('koa-static')(__dirname + '/public'))
 // ADD WHITELISTED URLS HERE
-const allowedOrigins = ['http://localhost:1337', 'localhost:8080']
+const allowedHosts = ['localhost:1337', 'localhost:8080', 'buttrfly.abyss.io']
 app.use(cors({
   origin: function(ctx) {
-    if (allowedOrigins.indexOf(ctx.origin) === -1) {
-      return ctx.throw(`🙈 ${ctx.origin} is not an authorized host site.`);
+    if (allowedHosts.indexOf(ctx.host) === -1) {
+      return ctx.throw(`🙈 ${ctx.host} is not an authorized host site.`);
     }
     return '*';
   },
