@@ -1,3 +1,5 @@
+const { TABLE_CODE, TABLE_SCOPE, EOS_API } = require('./statics')
+
 const HANDLE_ERROR = (ex, msg='An error occurred! Give them a good message', res, ctx) => {
   // Sample error
   // console.error(`${Date.now()} - ERROR - Unexpected error occurred: `, ex)
@@ -28,7 +30,7 @@ const GET_TABLE = ({ table, code, scope, limit, lower_bound, upper_bound }) => {
   return call
 }
 
-const BUILD_ACTION = ({ account='buttrflytest', name, actor='buttrflytest', permission='active', data}) => {
+const BUILD_ACTION = ({ account=TABLE_CODE, name, actor=TABLE_CODE, permission='active', data}) => {
   return {
     account,
     name,
