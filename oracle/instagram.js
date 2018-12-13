@@ -118,5 +118,5 @@ module.exports = (io) => {
     // oracleRows.rows.forEach(o => { checkCampaign(o) })
   }
 
-  getCampaigns()
+  // getCampaigns()
 }
