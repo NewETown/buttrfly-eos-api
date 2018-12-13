@@ -117,11 +117,11 @@ module.exports = (io) => {
           account: 'eosio',
           name: 'newaccount',
           authorization: [{
-            actor: GENERATING_ACCOUNT,
+            actor: TABLE_CODE,
             permission: 'active',
           }],
           data: {
-            creator: GENERATING_ACCOUNT,
+            creator: TABLE_CODE,
             name: accountName,
             owner: {
               threshold: 1,
@@ -147,11 +147,11 @@ module.exports = (io) => {
           account: 'eosio',
           name: 'buyrambytes',
           authorization: [{
-            actor: GENERATING_ACCOUNT,
+            actor: TABLE_CODE,
             permission: 'active',
           }],
           data: {
-            payer: GENERATING_ACCOUNT,
+            payer: TABLE_CODE,
             receiver: accountName,
             bytes: 8192,
           },
@@ -160,11 +160,11 @@ module.exports = (io) => {
           account: 'eosio',
           name: 'delegatebw',
           authorization: [{
-            actor: GENERATING_ACCOUNT,
+            actor: TABLE_CODE,
             permission: 'active',
           }],
           data: {
-            from: GENERATING_ACCOUNT,
+            from: TABLE_CODE,
             receiver: accountName,
             stake_net_quantity: '1.0000 EOS',
             stake_cpu_quantity: '2.0000 EOS',
