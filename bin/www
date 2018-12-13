@@ -105,6 +105,9 @@ const influencer = require('../routes/influencer')(io)
 app.use(campaign.routes(), campaign.allowedMethods())
 app.use(influencer.routes(), influencer.allowedMethods())
 
+// Spin up the oracle
+require('../oracle/instagram')(io)
+
 /**
  * Listen on provided port, on all network interfaces.
  */

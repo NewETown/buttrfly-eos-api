@@ -11,6 +11,12 @@ const LOCAL = 'http://127.0.0.1:7777'
 const JUNGLE_TEST = 'https://api.jungle.alohaeos.com:443'
 const MAIN_NET = 'YOUR_BP_OF_CHOICE'
 
+/*
+buttrflybank
+EOS6emoUajXZQjmfYdCMFaoqegLHa25V3eSpPtkscTWWzsHa4toff
+5Jfu7jY4KTS8qBimR2ssYXyB6GatrCngu4iMJzaTvchRxRmXKWY
+*/
+
 // Set up helpers
 const signatureProvider = new JsSignatureProvider([PRIVATE_KEY]);
 const rpc = new JsonRpc(JUNGLE_TEST, { fetch })
