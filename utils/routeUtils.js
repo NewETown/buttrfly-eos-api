@@ -2,7 +2,7 @@ const { TABLE_CODE, TABLE_SCOPE } = require('./statics')
 
 const HANDLE_ERROR = (ex, msg='An error occurred! Give them a good message', res, ctx) => {
   // Sample error
-  // console.error(`${Date.now()} - ERROR - Unexpected error occurred: `, ex)
+  console.error(`${Date.now()} - ERROR - Unexpected error occurred: `, ex)
   let message = msg
   let code = 400
   if (ex.json && ex.json.code === 401) {
